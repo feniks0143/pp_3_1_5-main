@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ public class UserController {
         this.modelMapper = modelMapper;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/api")
     public ResponseEntity<UserDTO> mainPage(Principal principal) {
         return ResponseEntity.ok(modelMapper.map(userService.findByUsername(principal.getName()), UserDTO.class));

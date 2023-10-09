@@ -4,17 +4,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.dto.UserDTO;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.util.UserErrorResponse;
 import ru.kata.spring.boot_security.demo.util.UserNotCreatedException;
 import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
-import ru.kata.spring.boot_security.demo.util.UserValidator;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -32,7 +31,7 @@ public class AdminController {
         this.modelMapper = modelMapper;
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping()
     public ResponseEntity <List<UserDTO>> getUsers() {
         return ResponseEntity.ok(userService.findAll().stream()
@@ -40,11 +39,13 @@ public class AdminController {
                 .collect(Collectors.toList()));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity <UserDTO> getOneDTO(@PathVariable("id") Long id) {
         return ResponseEntity.ok(convertToDTO(userService.findOne(id)));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<HttpStatus> createUser(@RequestBody @Valid UserDTO userDTO,
                                                  BindingResult bindingResult){
@@ -66,6 +67,7 @@ public class AdminController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/edit")
     public ResponseEntity<UserDTO> updateUser(@RequestBody @Valid UserDTO userDTO,
                                                  BindingResult bindingResult){
@@ -87,12 +89,14 @@ public class AdminController {
         return ResponseEntity.ok(userDTO);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
         userService.delete(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @ExceptionHandler
     private ResponseEntity<UserErrorResponse> handleException(UserNotFoundException e) {
         UserErrorResponse errorResponse = new UserErrorResponse(
@@ -102,6 +106,7 @@ public class AdminController {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND); // 404 status
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @ExceptionHandler
     private ResponseEntity<UserErrorResponse> handleException(UserNotCreatedException e) {
         UserErrorResponse response = new UserErrorResponse(
