@@ -153,7 +153,7 @@ function showEditModal(id) {
                 <div class="form-group">
                     <label class="font-weight-bold" for="lastName">Last name:</label>
                     <input class="form-control" type="text" value="${data.lastName}" id="lastName" name="lastName"
-                           placeholder="Sevostianov">
+                           placeholder="familia">
                 </div>
                 <div class="form-group">
                     <label class="font-weight-bold" for="password">Password:</label>
@@ -166,7 +166,7 @@ function showEditModal(id) {
                 <div class="form-group">
                     <label class="font-weight-bold" for="email">Email:</label>
                     <input class="form-control" type="text" value="${data.email}" name="email" id="email"
-                           placeholder="german@kata.academy">
+                           placeholder="email">
                 </div>
                 <div class="form-group" style="display: flex; flex-direction: column">
                     <label class="font-weight-bold" for="roles">Role:</label>
