@@ -24,7 +24,7 @@ public class UserController {
         this.modelMapper = modelMapper;
     }
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/api")
     public ResponseEntity<UserDTO> mainPage(Principal principal) {
         return ResponseEntity.ok(modelMapper.map(userService.findByUsername(principal.getName()), UserDTO.class));
