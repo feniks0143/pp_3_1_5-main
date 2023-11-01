@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>Home</title>
+</head>
+<body>
+<nav class="p-3 navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
+  <div class="container">
+    <div>
+      <b><span class="text-white" th:text="${#authentication.getPrincipal().getEmail()}"/></b>
+      <span class="text-white">with roles: </span>
+      <span class="text-white" th:each="role : ${#authentication.getPrincipal().getRoles()}" th:text="${role.toString() + ' '}"></span>
+    </div>
+    <a href="/logout" class="text-light">Logout</a>
+  </div>
+</nav>
+<div class="p-4 container-fluid">
+  <div class="container">
+    <div class="row">
+      <div class="col-3">
+        <ul class="nav nav-pills nav-fill flex-column">
+          <li class="nav-item text-left">
+            <a class="nav-link active" href="/admin/">Admin</a>
+          </li>
+          <li class="nav-item text-left">
+            <a class="nav-link" href="/user/">User</a>
+          </li>
+
+        </ul>
+      </div>
+      <div class="p-3 col bg-light">
+        <h1 class="mb-3">Admin panel</h1>
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <button class="nav-link active" id="users_table_card">Users table</button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link text-primary" id="new_user_card">New user</button>
+          </li>
+        </ul>
+
+                  <!--USER'S TABLE-->
+        <div class="card firstCard" style="display: block">
+          <div class="card-header font-weight-bold">All users</div>
+          <div class="card-body">
+            <table class="table">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Edit</th>
+                <th>Delete</th>
+              </tr>
+              </thead>
+              <tbody class="tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+
+                    <!--NEW USER-->
+        <div class="card secondCard" style="display: none">
+          <div class="card-header font-weight-bold">Add new user</div>
+          <div class="card-body align-items-center">
+            <div class="row justify-content-center">
+              <div class="col-6">
+                <form class="text-center form-new-user">
+                  <div class="form-group">
+                    <label class="font-weight-bold" for="username">Name:</label>
+                    <input class="form-control" id="username" type="text" name="username" placeholder="name">
+                  </div>
+                  <div class="form-group">
+                    <label class="font-weight-bold" for="lastName">Last name:</label>
+                    <input class="form-control" type="text" name="lastName" id="lastName" placeholder="familia">
+                  </div>
+                  <div class="form-group">
+                    <label class="font-weight-bold" for="password">Password:</label>
+                    <input class="form-control" type="password" name="password" id="password">
+                  </div>
+                  <div class="form-group">
+                    <label class="font-weight-bold" for="age">Age:</label>
+                    <input class="form-control" type="number" name="age" id="age">
+                  </div>
+                  <div class="form-group">
+                    <label class="font-weight-bold" for="email">Email:</label>
+                    <input class="form-control" type="text" name="email" id="email" placeholder="email">
+                  </div>
+                  <label class="font-weight-bold">Role: </label>
+                  <select multiple class="mb-3 custom-select" id="roles" name="roles">
+                    <option value="1">Admin</option>
+                    <option value="2">User</option>
+                  </select>
+                  <button class="btn btn-success" id="addNewUserBtn" type="button">Add new user</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+              <!--MODAL-->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit user</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row justify-content-center">
+          <div class="col-6 insertModal"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="editInfo">Edit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src=/main.js></script>
+</body>
+</html>

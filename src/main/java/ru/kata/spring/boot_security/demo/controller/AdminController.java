@@ -31,7 +31,7 @@ public class AdminController {
         this.modelMapper = modelMapper;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping()
     public ResponseEntity <List<UserDTO>> getUsers() {
         return ResponseEntity.ok(userService.findAll().stream()
@@ -39,13 +39,13 @@ public class AdminController {
                 .collect(Collectors.toList()));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity <UserDTO> getOneDTO(@PathVariable("id") Long id) {
         return ResponseEntity.ok(convertToDTO(userService.findOne(id)));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<HttpStatus> createUser(@RequestBody @Valid UserDTO userDTO,
                                                  BindingResult bindingResult){
@@ -67,7 +67,7 @@ public class AdminController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/edit")
     public ResponseEntity<UserDTO> updateUser(@RequestBody @Valid UserDTO userDTO,
                                                  BindingResult bindingResult){
@@ -89,14 +89,14 @@ public class AdminController {
         return ResponseEntity.ok(userDTO);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
         userService.delete(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ExceptionHandler
     private ResponseEntity<UserErrorResponse> handleException(UserNotFoundException e) {
         UserErrorResponse errorResponse = new UserErrorResponse(
@@ -106,7 +106,7 @@ public class AdminController {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND); // 404 status
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ExceptionHandler
     private ResponseEntity<UserErrorResponse> handleException(UserNotCreatedException e) {
         UserErrorResponse response = new UserErrorResponse(
