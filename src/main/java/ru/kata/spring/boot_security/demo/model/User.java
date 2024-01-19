@@ -9,9 +9,10 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
-import java.util.*;
-
+import java.util.Collection;
+import java.util.Objects;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "users")

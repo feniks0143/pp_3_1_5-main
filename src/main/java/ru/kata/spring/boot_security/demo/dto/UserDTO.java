@@ -1,9 +1,13 @@
 package ru.kata.spring.boot_security.demo.dto;
 
+
 import ru.kata.spring.boot_security.demo.model.Role;
 
 import javax.persistence.Column;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -19,6 +23,7 @@ public class UserDTO {
     @Email(message = "*введите корректный email")
     private String email;
     @Column(name = "password")
+
     @Size(min = 3, message = "пароль должен быть не менее 4 символов")
     private String password;
     private Set<Role> roles = new TreeSet();
